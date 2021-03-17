@@ -1,7 +1,8 @@
-import React, { Component, useRef, useState,useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import './App.css';
 import Icon from '@mdi/react';
 import { mdiCalendarClock } from '@mdi/js';
+import axios from 'axios';
 
 function App() {
   const [timerDays, setTimerDays] = useState('00')
@@ -12,15 +13,14 @@ function App() {
   let interval = useRef();
 
   const startTimer = () => {
-    const countdownDate = new Date('March 28, 2021 05:00:01').getTime();
-
+    const countdownDate = new Date('March 28, 2021 17:00:00').getTime();
     interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = countdownDate - now;
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24))
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24) / (1000 * 60 * 60)))
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60 * 60))
+      const minutes = Math.floor((distance % (1000 * 60 * 60 ) * 60) / (1000 * 60 * 60))
       const seconds = Math.floor((distance % (1000 * 60)) / 1000 )
 
       if (distance < 0) {
@@ -38,24 +38,29 @@ function App() {
   }
   useEffect(() => {
    startTimer();
-   return () => {
-    clearInterval(interval.current)
-   }
+   return () => clearInterval(interval.current)
+   
   })
+let toggleHidden = {}
+let url = ''
+const handleClick = (event) => () => {
+  
+}
 
   return (
     <section className="timer-container">
       <section className="timer">
+        
         <div>
-
           <Icon path={mdiCalendarClock}
             title="User Profile"
             size={7}
             color='white'
             className='timer-icon'         
           />
-          <h2>Countdown Timer</h2>
-          <p>Couintdown to a really special date</p>
+          <h2>Tiempo para que llegue Karlita</h2>
+          <button className='btn' onClick={handleClick}>Panda</button>
+
         </div>
         <div>
           <section>
@@ -79,6 +84,7 @@ function App() {
           </section>
         </div>
       </section>
+      <img src = {url} style={toggleHidden}/> 
     </section>
   );
 }
