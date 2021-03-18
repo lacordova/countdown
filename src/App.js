@@ -9,11 +9,12 @@ function App() {
   const [timerHours, settimerHours] = useState('00')
   const [timerMinutes, setTimerMinutes] = useState('00')
   const [timerSeconds, setTimerSeconds] = useState('00')
+  const [img, setImg] = useState({url:'',style: {visibility: 'hidden'}})
 
   let interval = useRef();
 
   const startTimer = () => {
-    const countdownDate = new Date('March 28, 2021 17:00:00').getTime();
+    const countdownDate = new Date('March 27, 2021 17:00:00').getTime();
     interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = countdownDate - now;
@@ -41,10 +42,29 @@ function App() {
    return () => clearInterval(interval.current)
    
   })
-let toggleHidden = {}
-let url = ''
-const handleClick = (event) => () => {
-  
+let url = 'https://api.giphy.com/v1/gifs/random?api_key=BxUfUvt7ADVtgzkusUlzYNh4Wz3Vprki&tag=panda&rating=g'
+
+const handleSubmit = (event) => {
+  event.preventDefault()
+
+  axios
+    .get(url)
+    .then(obj => {
+      const urlImage = obj.data.data.images.original.url
+      setImg({
+        url: urlImage,
+        style: {
+          visibility: 'visible',
+          position: 'absolute',
+          top: '27px',
+          left: 'calc((100vw - 17%)/2)',
+          width: '17%',
+          'height': 'auto',
+          'borderRadius': '10px',
+          'box-shadow': '3px 3px 3px rgba(0,0,0,0.5)'
+        }}
+      )
+    })
 }
 
   return (
@@ -59,7 +79,9 @@ const handleClick = (event) => () => {
             className='timer-icon'         
           />
           <h2>Tiempo para que llegue Karlita</h2>
-          <button className='btn' onClick={handleClick}>Panda</button>
+          <form onSubmit ={handleSubmit}>
+            <button type='submit' className='btn' >Panda</button>
+          </form>
 
         </div>
         <div>
@@ -84,7 +106,7 @@ const handleClick = (event) => () => {
           </section>
         </div>
       </section>
-      <img src = {url} style={toggleHidden}/> 
+      <img src = {img.url} style={img.style} alt='panda gif'/> 
     </section>
   );
 }
